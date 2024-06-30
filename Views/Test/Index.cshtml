@@ -1,10 +1,16 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Service Bus Queue Monitoring";
     @model SbModel
 }
 
 <h1>Service Bus Main Page</h1>
+<br />
+<h1>Service Bus Message Count</h1>
+<h1>@Model.MessageCount</h1>
+<br />
+<h1>Service Bus Scheduled Message Count</h1>
+<h1>@Model.ScheduledMessageCount</h1>
 @* <h1>@Model.MessageCount</h1> *@
 
 @* Create a button *@
