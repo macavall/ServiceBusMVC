@@ -18,7 +18,7 @@ namespace ServiceBusMVC.Controllers
         {
             var MsgModel = new SbModel()
             {
-                MessageCount = await _sbService.GetQueueMsgCount()
+                MessageCount = await _sbService.GetQueueMsgCount("myqueue")
             };
 
             return View(MsgModel);
