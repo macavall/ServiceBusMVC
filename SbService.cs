@@ -19,39 +19,6 @@ namespace ServiceBusMVC
             AdminClientSetup();
         }
 
-        public async Task<int> GetQueueMsgCount(string queueName)
-        {
-            await Task.Delay(1);
-
-            long messageCount = 0;
-            long scheduledMessageCount = 0;
-
-            if (sbAdminClient is not null)
-            {
-                messageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(queueName)).Value.ActiveMessageCount;
-                scheduledMessageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(queueName)).Value.ScheduledMessageCount;
-            }
-
-            return Convert.ToInt32(messageCount);
-        }
-
-        // Schedule Message Count
-        public async Task<int> GetQueueSchMsgCount(string queueName)
-        {
-            await Task.Delay(1);
-
-            long messageCount = 0;
-            long scheduledMessageCount = 0;
-
-            if (sbAdminClient is not null)
-            {
-                messageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(queueName)).Value.ActiveMessageCount;
-                scheduledMessageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(queueName)).Value.ScheduledMessageCount;
-            }
-
-            return Convert.ToInt32(messageCount);
-        }
-
         public void AdminClientSetup()
         {
             SetConnectionString();
@@ -68,6 +35,35 @@ namespace ServiceBusMVC
             {
                 sbConnString = Environment.GetEnvironmentVariable("sbConnString");
             }
+        }
+
+        public async Task<int> GetQueueMsgCount(string queueName)
+        {
+            await Task.Delay(1);
+
+            long messageCount = 0;
+
+            if (sbAdminClient is not null)
+            {
+                messageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(queueName)).Value.ActiveMessageCount;
+            }
+
+            return Convert.ToInt32(messageCount);
+        }
+
+        // Schedule Message Count
+        public async Task<int> GetQueueSchMsgCount(string queueName)
+        {
+            await Task.Delay(1);
+
+            long scheduledMessageCount = 0;
+
+            if (sbAdminClient is not null)
+            {
+                scheduledMessageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(queueName)).Value.ScheduledMessageCount;
+            }
+
+            return Convert.ToInt32(scheduledMessageCount);
         }
     }
 }
