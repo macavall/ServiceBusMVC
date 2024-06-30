@@ -10,17 +10,39 @@ namespace ServiceBusMVC
     {
         private readonly IConfiguration _config;
         private static ServiceBusAdministrationClient? sbAdminClient;
+        private static string? sbConnString;
 
         public SbService(IConfiguration config)
         {
             _config = config;
+
+            AdminClientSetup();
         }
 
-        public async Task<int> GetQueueMsgCount()
+        public async Task<int> GetQueueMsgCount(string? queueName)
         {
             await Task.Delay(1);
-            string? sbConnString = String.Empty;
 
+            long messageCount = 0;
+            long scheduledMessageCount = 0;
+
+            if (sbAdminClient is not null)
+            {
+                messageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync("myqueue")).Value.ActiveMessageCount;
+                scheduledMessageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync("myqueue")).Value.ScheduledMessageCount;
+            }
+
+            return Convert.ToInt32(messageCount);
+        }
+
+        public void AdminClientSetup()
+        {
+            SetConnectionString();
+            sbAdminClient = new ServiceBusAdministrationClient(sbConnString);
+        }
+
+        public void SetConnectionString()
+        {
             if (Environment.GetEnvironmentVariable("sbConnString")?.Count() < 5 || Environment.GetEnvironmentVariable("sbConnString") is null)
             {
                 sbConnString = _config["sbConnString"];
@@ -29,13 +51,6 @@ namespace ServiceBusMVC
             {
                 sbConnString = Environment.GetEnvironmentVariable("sbConnString");
             }
-
-            var administrationClient = new ServiceBusAdministrationClient(sbConnString);
-            var props = await administrationClient.GetQueueRuntimePropertiesAsync("myqueue");
-            var messageCount = props.Value.ActiveMessageCount;
-            var scheduledMessageCount = props.Value.ScheduledMessageCount;
-
-            return Convert.ToInt32(messageCount);
         }
     }
 }
