@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 
 namespace ServiceBusMVC.Controllers
 {
+    public class MsgCounts
+    {
+        public string? MsgCount { get; set; }
+        public string? SchMsgCount { get; set; }
+
     public class TestController : Controller
     {
         private readonly ISbService _sbService;
@@ -22,6 +27,13 @@ namespace ServiceBusMVC.Controllers
             };
 
             return View(MsgModel);
+        }
+
+        public async Task<string> GetMessageCounts()
+        {
+
+
+            return "";
         }
 
         // GET: TestController/Details/5
