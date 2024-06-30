@@ -4,6 +4,27 @@
     @model SbModel
 }
 
-<h1>Index</h1>
-<h1>@Model.MessageCount</h1>
+<h1>Service Bus Main Page</h1>
+@* <h1>@Model.MessageCount</h1> *@
+
+@* Create a button *@
+<br />
+<h6>Click the button to populate the Service Bus with 10,000 Messages in each Service Bus Queue</h6>
+<button id="btn">Populate Service Bus</button>
+
+@* @section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#btn').click(function () {
+                $.ajax({
+                    url: '/Test/PopulateSbQueues',
+                    type: 'GET',
+                    success: function (data) {
+                        $('h1').text(data);
+                    }
+                });
+            });
+        });
+    </script>
+} *@
 
