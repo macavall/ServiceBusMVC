@@ -39,8 +39,6 @@ namespace ServiceBusMVC
 
         public async Task<int> GetQueueMsgCount(string queueName)
         {
-            await Task.Delay(1);
-
             long messageCount = 0;
 
             if (sbAdminClient is not null)
@@ -54,8 +52,6 @@ namespace ServiceBusMVC
         // Schedule Message Count
         public async Task<int> GetQueueSchMsgCount(string queueName)
         {
-            await Task.Delay(1);
-
             long scheduledMessageCount = 0;
 
             if (sbAdminClient is not null)
