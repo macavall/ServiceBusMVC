@@ -51,7 +51,7 @@ namespace ServiceBusMVC
             // Wait for all tasks to complete
             await Task.WhenAll(tasks);
 
-            // Clean up resources by closing the client. This is important to free up resources.
+            // Clean up resources by closing the client. This is important to free up resources. 
             await client.DisposeAsync();
         }
 
