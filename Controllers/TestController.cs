@@ -7,8 +7,9 @@ namespace ServiceBusMVC.Controllers
 {
     public class MsgCounts
     {
-        public string? MsgCount { get; set; }
-        public string? SchMsgCount { get; set; }
+        public string? MessageCount { get; set; }
+        public string? ScheduledMessageCount { get; set; }
+    }
 
     public class TestController : Controller
     {
@@ -31,9 +32,16 @@ namespace ServiceBusMVC.Controllers
 
         public async Task<string> GetMessageCounts()
         {
+            var msgCounts = new MsgCounts()
+            {
+                MessageCount = (await _sbService.GetQueueMsgCount("myqueue")).ToString(),
+                ScheduledMessageCount = (await _sbService.GetQueueSchMsgCount("myqueue")).ToString()
+            };
+
+            // Newtonsoft serialize msgCounts for the return
 
 
-            return "";
+            return Newtonsoft.Json.JsonConvert.SerializeObject(msgCounts);
         }
 
         // GET: TestController/Details/5

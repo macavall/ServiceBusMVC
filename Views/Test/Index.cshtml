@@ -7,10 +7,10 @@
 <h1>Service Bus Main Page</h1>
 <br />
 <h1>Service Bus Message Count</h1>
-<h1>@Model.MessageCount</h1>
+<h1 id="MsgCount">@Model.MessageCount</h1>
 <br />
 <h1>Service Bus Scheduled Message Count</h1>
-<h1>@Model.ScheduledMessageCount</h1>
+<h1 id="SchMsgCount">@Model.ScheduledMessageCount</h1>
 
 @* Create a button *@
 <br />
@@ -42,8 +42,8 @@
                     url: '/Test/GetMessageCounts',
                     type: 'GET',
                     success: function (data) {
-                        $('h1').text(data.MessageCount);
-                        $('h1').text(data.ScheduledMessageCount);
+                        $('#MsgCount').text(data.MessageCount);
+                        $('#SchMsgCount').text(data.ScheduledMessageCount);
                     }
                 });
             }, 1000);
