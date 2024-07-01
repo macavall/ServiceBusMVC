@@ -34,7 +34,7 @@ namespace ServiceBusMVC
             var client = new ServiceBusClient(sbConnString);
 
             // Total messages to send
-            int totalMessages = 300;
+            int totalMessages = 10000;
             int batchSize = 20;
             int numberOfTasks = 20;
             int messagesPerTask = totalMessages / numberOfTasks;
@@ -69,8 +69,8 @@ namespace ServiceBusMVC
                     {
                         var message = new ServiceBusMessage($"Message {j}")
                         {
-                            ScheduledEnqueueTime = myTime
-                        };
+                            ScheduledEnqueueTime = DateTime.UtcNow.AddMinutes(5)
+    };
 
                         if (!messageBatch.TryAddMessage(message))
                         {
@@ -126,26 +126,26 @@ namespace ServiceBusMVC
             }
         }
 
-        public async Task<int> GetQueueMsgCount(string queueName)
+        public async Task<int> GetQueueMsgCount(string id)
         {
             long messageCount = 0;
 
             if (sbAdminClient is not null)
             {
-                messageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(queueName)).Value.ActiveMessageCount;
+                messageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(id)).Value.ActiveMessageCount;
             }
 
             return Convert.ToInt32(messageCount);
         }
 
         // Schedule Message Count
-        public async Task<int> GetQueueSchMsgCount(string queueName)
+        public async Task<int> GetQueueSchMsgCount(string id)
         {
             long scheduledMessageCount = 0;
 
             if (sbAdminClient is not null)
             {
-                scheduledMessageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(queueName)).Value.ScheduledMessageCount;
+                scheduledMessageCount = (await sbAdminClient.GetQueueRuntimePropertiesAsync(id)).Value.ScheduledMessageCount;
             }
 
             return Convert.ToInt32(scheduledMessageCount);

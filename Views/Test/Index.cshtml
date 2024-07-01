@@ -1,21 +1,48 @@
 ﻿
 @{
     ViewData["Title"] = "Service Bus Queue Monitoring";
-    @model SbModel
 }
 
 <h1>Service Bus Main Page</h1>
 <br />
 <h1>Service Bus Message Count</h1>
-<h1 id="MsgCount">@Model.MessageCount</h1>
+<h1 id="MsgCount"></h1>
 <br />
-<h1>Service Bus Scheduled Message Count</h1>
-<h1 id="SchMsgCount">@Model.ScheduledMessageCount</h1>
+<h5>Service Bus Scheduled Message Count</h5>
+<h1 id="SchMsgCount"></h1>
+
+<table id="QueueTable">
+    <tr>
+        <td><b><i>Message Type</i></b></td>
+        <td><b>sbqueueonlybatchnopart</b></td>
+        <td><b>sbqueuepart</b></td>
+        <td><b>sbqueuepartbatch</b></td>
+    </tr>
+    <tr>
+        <td>Active Messages</td>
+        <td id="activesbqueueonlybatchnopartcell"></td>
+        <td id="activesbqueuepartcell"></td>
+        <td id="activesbqueuepartbatchcell"></td>
+    </tr>
+    <tr>
+        <td>Scheduled Messages</td>
+        <td id="scheduledsbqueueonlybatchnopartcell"></td>
+        <td id="scheduledsbqueuepartcell"></td>
+        <td id="scheduledsbqueuepartbatchcell"></td>
+    </tr>
+</table>
 
 @* Create a button *@
 <br />
 <h6>Click the button to populate the Service Bus with 10,000 Messages in each Service Bus Queue</h6>
-<button id="btn">Populate Service Bus</button>
+<h6>Populate the Queues (one at a time)</h6>
+
+<button id="sbqueueonlybatchnopart">sbqueueonlybatchnopart</button>
+<button id="sbqueuepart">sbqueuepart</button>
+<button id="sbqueuepartbatch">sbqueuepartbatch</button>
+<br />
+<br />
+<h6 id="QueueText">Populating the Queue:</h6>
 
 @* JavaScript that calls Test/GetMessageCounts and populates the Model.MessageCount and Model.ScheduledMessageCount and have the values refreshed every second *@
 @section Scripts {
@@ -23,18 +50,93 @@
         $(document).ready(function () {
             setInterval(function () {
                 $.ajax({
-                    url: '/Test/GetMessageCounts',
+                    url: '/Test/GetMessageCounts/sbqueueonlybatchnopart',
                     type: 'GET',
                     success: function (data) {
-                        $('#MsgCount').text(JSON.parse(data).MessageCount);
-                        $('#SchMsgCount').text(JSON.parse(data).ScheduledMessageCount);
+                        $('#activesbqueueonlybatchnopartcell').text(JSON.parse(data).MessageCount);
+                        $('#scheduledsbqueueonlybatchnopartcell').text(JSON.parse(data).ScheduledMessageCount);
                     }
                 });
-            }, 1000);
+
+                $.ajax({
+                    url: '/Test/GetMessageCounts/sbqueuepart',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#activesbqueuepartcell').text(JSON.parse(data).MessageCount);
+                        $('#scheduledsbqueuepartcell').text(JSON.parse(data).ScheduledMessageCount);
+                    }
+                });
+
+                $.ajax({
+                    url: '/Test/GetMessageCounts/sbqueuepartbatch',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#activesbqueuepartbatchcell').text(JSON.parse(data).MessageCount);
+                        $('#scheduledsbqueuepartbatchcell').text(JSON.parse(data).ScheduledMessageCount);
+                    }
+                });
+            }, 3000);
+        });
+
+        $(document).ready(function () {
+            $('#sbqueueonlybatchnopart').click(function () {
+
+                document.getElementById('QueueText').innerText = 'Populating the Queue: sbqueueonlybatchnopart';
+
+                $.ajax({
+                    url: '/Test/PopulateSB/sbqueueonlybatchnopart',
+                    type: 'GET',
+                    success: function (data) {
+                        //alert('Service Bus Populated');
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#sbqueuepart').click(function () {
+
+                document.getElementById('QueueText').innerText = 'Populating the Queue: sbqueuepart';
+
+                $.ajax({
+                    url: '/Test/PopulateSB/sbqueuepart',
+                    type: 'GET',
+                    success: function (data) {
+                        //alert('Service Bus Populated');
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#sbqueuepartbatch').click(function () {
+
+                document.getElementById('QueueText').innerText = 'Populating the Queue: sbqueuepartbatch';
+
+                $.ajax({
+                    url: '/Test/PopulateSB/sbqueuepartbatch',
+                    type: 'GET',
+                    success: function (data) {
+                        //alert('Service Bus Populated');
+                    }
+                });
+            });
         });
     </script>
-}
 
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+}
 
 
 

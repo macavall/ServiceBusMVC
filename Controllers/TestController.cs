@@ -24,22 +24,26 @@ namespace ServiceBusMVC.Controllers
         {
             var MsgModel = new SbModel()
             {
-                MessageCount = await _sbService.GetQueueMsgCount("myqueue")
+                MessageCount = await _sbService.GetQueueMsgCount("sbqueueonlybatchnopart")
             };
 
+            //return View();
             return View(MsgModel);
         }
 
-        public async Task<string> GetMessageCounts()
+        [HttpGet]
+        public async Task PopulateSB(string id)
+        {
+            await _sbService.PopulateSB(id);
+        }
+
+        public async Task<string> GetMessageCounts(string id)
         {
             var msgCounts = new MsgCounts()
             {
-                MessageCount = (await _sbService.GetQueueMsgCount("myqueue")).ToString(),
-                ScheduledMessageCount = (await _sbService.GetQueueSchMsgCount("myqueue")).ToString()
+                MessageCount = (await _sbService.GetQueueMsgCount(id)).ToString(),
+                ScheduledMessageCount = (await _sbService.GetQueueSchMsgCount(id)).ToString()
             };
-
-            // Newtonsoft serialize msgCounts for the return
-
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(msgCounts);
         }

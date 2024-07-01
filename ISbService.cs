@@ -6,5 +6,6 @@ namespace ServiceBusMVC
     {
         public Task<int> GetQueueMsgCount(string queueName);
         public Task<int> GetQueueSchMsgCount(string queueName);
+        public Task PopulateSB(string queueName);
     }
 }
