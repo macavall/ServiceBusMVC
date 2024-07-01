@@ -13,7 +13,6 @@ namespace ServiceBusMVC
         private readonly IConfiguration _config;
         private static ServiceBusAdministrationClient? sbAdminClient;
         private static string? sbConnString;
-        private static DateTime myTime = DateTime.UtcNow.AddMinutes(5);
 
         public SbService(IConfiguration config)
         {
@@ -51,7 +50,7 @@ namespace ServiceBusMVC
             // Wait for all tasks to complete
             await Task.WhenAll(tasks);
 
-            // Clean up resources by closing the client. This is important to free up resources. 
+            // Clean up resources by closing the client. This is important to free up resources.
             await client.DisposeAsync();
         }
 
